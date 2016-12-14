@@ -3,7 +3,7 @@
 import os
 import random
 import time
-import RPi.GPIO as GPIO
+from Arduino import *
 import alsaaudio
 import wave
 import random
@@ -14,9 +14,9 @@ import re
 from memcache import Client
 
 #Settings
-button = 18 #GPIO Pin with button connected
-lights = [24, 25] # GPIO Pins with LED's conneted
-device = "plughw:1" # Name of your microphone/soundcard in arecord -L
+button = 203 #GPIO Pin with button connected
+lights = [198, 199] # GPIO Pins with LED's conneted
+device = "plughw:CARD=Device,DEV=0" # Name of your microphone/soundcard in arecord -L
 
 #Setup
 recorded = False
@@ -54,7 +54,7 @@ def gettoken():
 		
 
 def alexa():
-	GPIO.output(lights[0], GPIO.HIGH)
+	digitalWrite(lights[0], HIGH)
 	url = 'https://access-alexa-na.amazon.com/v1/avs/speechrecognizer/recognize'
 	headers = {'Authorization' : 'Bearer %s' % gettoken()}
 	d = {
@@ -93,34 +93,37 @@ def alexa():
 				audio = d.split('\r\n\r\n')[1].rstrip('--')
 		with open(path+"response.mp3", 'wb') as f:
 			f.write(audio)
-		GPIO.output(lights[1], GPIO.LOW)
+		digitalWrite(lights[1], LOW)
 
-		os.system('mpg123 -q {}1sec.mp3 {}response.mp3 {}1sec.mp3'.format(path, path, path))
-		GPIO.output(lights[0], GPIO.LOW)
+		# os.system('mpg123 -q {}1sec.mp3 {}response.mp3 {}1sec.mp3'.format(path, path, path))
+		os.system('madplay {}1sec.mp3 {}response.mp3 {}1sec.mp3 -o wave:- | aplay -D "plughw:CARD=Device,DEV=0" > /dev/null 2>&1'.format(path, path, path))
+		digitalWrite(lights[0], LOW)
 	else:
-		GPIO.output(lights[1], GPIO.LOW)
+		digitalWrite(lights[1], LOW)
 		for x in range(0, 3):
 			time.sleep(.2)
-			GPIO.output(lights[1], GPIO.HIGH)
+			digitalWrite(lights[1], HIGH)
 			time.sleep(.2)
-			GPIO.output(lights[1], GPIO.LOW)
+			digitalWrite(lights[1], LOW)
 		
 
 
 
 def start():
-	last = GPIO.input(button)
+	last = digitalRead(button)
 	while True:
-		val = GPIO.input(button)
-		GPIO.wait_for_edge(button, GPIO.FALLING) # we wait for the button to be pressed
-		GPIO.output(lights[1], GPIO.HIGH)
+		val = digitalRead(button)
+		while(digitalRead(button)==0):
+			# we wait for the button to be pressed
+			delay(10)
+		digitalWrite(lights[1], HIGH)
 		inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NORMAL, device)
 		inp.setchannels(1)
 		inp.setrate(16000)
 		inp.setformat(alsaaudio.PCM_FORMAT_S16_LE)
 		inp.setperiodsize(500)
 		audio = ""
-		while(GPIO.input(button)==0): # we keep recording while the button is pressed
+		while(digitalRead(button)==1): # we keep recording while the button is pressed
 			l, data = inp.read()
 			if l:
 				audio += data
@@ -133,19 +136,18 @@ def start():
 	
 
 if __name__ == "__main__":
-	GPIO.setwarnings(False)
-	GPIO.cleanup()
-	GPIO.setmode(GPIO.BCM)
-	GPIO.setup(button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-	GPIO.setup(lights, GPIO.OUT)
-	GPIO.output(lights, GPIO.LOW)
+	pinMode(button, INPUT)
+	pinMode(lights[0], OUTPUT)
+	pinMode(lights[1], OUTPUT)
+	digitalWrite(lights[0], LOW)
+	digitalWrite(lights[1], LOW)
 	while internet_on() == False:
 		print "."
 	token = gettoken()
-	os.system('mpg123 -q {}1sec.mp3 {}hello.mp3'.format(path, path))
+	os.system('madplay {}1sec.mp3 {}hello.mp3 -o wave:- | aplay -D "plughw:CARD=Device,DEV=0" > /dev/null 2>&1'.format(path, path))
 	for x in range(0, 3):
 		time.sleep(.1)
-		GPIO.output(lights[0], GPIO.HIGH)
+		digitalWrite(lights[0], HIGH)
 		time.sleep(.1)
-		GPIO.output(lights[0], GPIO.LOW)
+		digitalWrite(lights[0], LOW)
 	start()

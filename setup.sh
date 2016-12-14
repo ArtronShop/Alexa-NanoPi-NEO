@@ -2,6 +2,7 @@
 
 apt-get update
 apt-get install libasound2-dev memcached mpg123 python-alsaaudio -y
+apt-get install python-setuptools python-dev build-essential -y #install python and pip
 easy_install pip
 pip install -r requirements.txt
 cp initd_alexa.sh /etc/init.d/AlexaPi
