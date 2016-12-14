@@ -14,7 +14,8 @@ If you're not sure whether to switch to that new project, wait for us when we fe
 ---
 
 ## Contributors
-- Sam Machin
+- Sonthaya Nongnuch
+- Sam Machin (source)
 
 ---
 This is the code needed to Turn a Raspberry Pi into a client for Amazon's Alexa service. Feedback welcome.
@@ -23,7 +24,7 @@ This is the code needed to Turn a Raspberry Pi into a client for Amazon's Alexa 
 ## Requirements
 
 You will need:
-* A Raspberry Pi
+* A NanoPi NEO / Air
 * An SD Card with a fresh install of Raspbian (tested against build 2015-11-21 Jessie)
 * An External Speaker with 3.5mm Jack
 * A USB Sound Dongle and Microphone
@@ -42,7 +43,7 @@ Boot your fresh Pi and login to a command prompt as root.
 Make sure you are in /root
 
 Clone this repo to the Pi
-`git clone https://github.com/sammachin/AlexaPi.git`
+`git clone https://github.com/ioxhop/Alexa-NanoPi-NEO.git`
 Run the setup script
 `./setup.sh`
 
