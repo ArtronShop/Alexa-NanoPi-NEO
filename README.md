@@ -18,14 +18,14 @@ If you're not sure whether to switch to that new project, wait for us when we fe
 - Sam Machin (source)
 
 ---
-This is the code needed to Turn a Raspberry Pi into a client for Amazon's Alexa service. Feedback welcome.
+This is the code needed to Turn a NanoPi NEO into a client for Amazon's Alexa service. Feedback welcome.
 ---
 
 ## Requirements
 
 You will need:
 * A NanoPi NEO / Air
-* An SD Card with a fresh install of Raspbian (tested against build 2015-11-21 Jessie)
+* An SD Card with a fresh install of OS
 * An External Speaker with 3.5mm Jack
 * A USB Sound Dongle and Microphone
 * A push to make button connected between GPIO 18 and GND
