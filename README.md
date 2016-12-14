@@ -1,4 +1,4 @@
-# AlexaPi
+# Alexa NanoPi NEO
 
 ---
 ## ATTENTION:
@@ -76,3 +76,5 @@ The LED's are a visual indicator of status, I used a duel Red/Green LED but you 
 The internet_on() routine is testing the connection to the Amazon auth server as I found that running the script on boot it was failing due to the network not being fully established so this will keep it retrying until it can make contact before getting the auth token.
 
 The auth token is generated from the request_token the auth_token is then stored in a local memcache with and expiry of just under an hour to align with the validity at Amazon, if the function fails to get an access_token from memcache it will then request a new one from Amazon using the refresh token.
+
+thanks source for https://github.com/sammachin/AlexaPi , modify by IOXhop : ()[www.ioxhop.com]
