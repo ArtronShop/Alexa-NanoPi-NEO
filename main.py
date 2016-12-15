@@ -16,7 +16,7 @@ from memcache import Client
 #Settings
 button = 203 #GPIO Pin with button connected
 lights = [198, 199] # GPIO Pins with LED's conneted
-device = "plughw:CARD=Device,DEV=0" # Name of your microphone/soundcard in arecord -L
+# device = "plughw:CARD=Device,DEV=0" # Name of your microphone/soundcard in arecord -L
 
 #Setup
 recorded = False

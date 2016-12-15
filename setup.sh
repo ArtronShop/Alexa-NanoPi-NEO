@@ -2,8 +2,8 @@
 
 apt-get update
 apt-get install libasound2-dev memcached mpg123 python-alsaaudio -y
-apt-get install python-setuptools python-dev build-essential -y #install python and pip
-easy_install pip
+apt-get install python-setuptools python-dev build-essential -y # install python
+easy_install pip # install pip
 pip install -r requirements.txt
 cp initd_alexa.sh /etc/init.d/AlexaPi
 update-rc.d AlexaPi defaults
@@ -28,6 +28,10 @@ echo Client_ID = \"$cid\" >> creds.py
 echo "Enter your Security Client Secret:"
 read secret
 echo Client_Secret = \"$secret\" >> creds.py
+
+echo "Enter your sound card device:"
+read sound_card
+echo device = \"$sound_card\" >> creds.py
 
 ip=`hostname -I`
 python ./auth_web.py 
